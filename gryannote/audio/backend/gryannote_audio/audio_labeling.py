@@ -452,20 +452,20 @@ class AudioLabeling(
                     binary_data = binary_data[44:]
         return binary_data, output_file
 
-    # async def combine_stream(
-    #     self,
-    #     stream: list[bytes],
-    #     desired_output_format: str | None = None,
-    #     only_file=False,
-    # ) -> GradioDataModel | FileData:
-    #     """Combine all of the stream chunks into a single file.
+    async def combine_stream(
+        self,
+        stream: list[bytes],
+        desired_output_format: str | None = None,
+        only_file=False,
+    ) -> GradioDataModel | FileData:
+        """Combine all of the stream chunks into a single file.
 
-    #     This is needed for downloading the stream and for caching examples.
-    #     If `only_file` is True, only the FileData corresponding to the file should be returned (needed for downloading the stream).
-    #     The desired_output_format optionally converts the combined file. Should only be used for cached examples.
-    #     """
-    #     # TODO: URGENT
-    #     pass
+        This is needed for downloading the stream and for caching examples.
+        If `only_file` is True, only the FileData corresponding to the file should be returned (needed for downloading the stream).
+        The desired_output_format optionally converts the combined file. Should only be used for cached examples.
+        """
+        # TODO: URGENT
+        pass
 
     def process_example(
         self, value: Tuple[int, np.ndarray] | str | Path | bytes | None
