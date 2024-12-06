@@ -1,6 +1,8 @@
 import warnings
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+import torch
+
 from gradio.components.base import FormComponent
 from gradio.data_classes import GradioModel
 from gradio.events import Events
@@ -297,6 +299,10 @@ class PipelineSelector(FormComponent):
                     "It might be because the pipeline is private or gated so make"
                     " sure to authenticate with your hugging face token "
                 )
+
+        device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        pipeline.to(device)
+
         return pipeline
 
     def _get_param_specs(self, param_types: Dict, param_values: Dict) -> Dict:
