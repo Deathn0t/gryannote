@@ -11,7 +11,7 @@ import torch
 import torchaudio
 from gradio import Warning, processing_utils, utils
 from gradio.components.base import Component, StreamingInput, StreamingOutput
-from gradio.data_classes import FileData
+from gradio.data_classes import FileData, GradioDataModel
 from gradio.events import Events
 from gradio.exceptions import Error
 from gradio_client import utils as client_utils
@@ -61,9 +61,9 @@ class TimelineOptions:
 
     # camelCase style is used here to match timeline's options in frontend
     height: int | float = 20
-    insertPosition: Literal[
-        "afterbegin", "afterend", "beforebegin", "beforeend"
-    ] = "afterend"
+    insertPosition: Literal["afterbegin", "afterend", "beforebegin", "beforeend"] = (
+        "afterend"
+    )
     primaryLabelInterval: int | float = 5
     primaryLabelSpacing: int | float = 5
     secondaryLabelInterval: int | float = 1
@@ -443,14 +443,29 @@ class AudioLabeling(
                 # strip length information from first chunk header, remove headers entirely from subsequent chunks
                 if first_chunk:
                     binary_data = (
-                        binary_data[:4] + b"\xFF\xFF\xFF\xFF" + binary_data[8:]
+                        binary_data[:4] + b"\xff\xff\xff\xff" + binary_data[8:]
                     )
                     binary_data = (
-                        binary_data[:40] + b"\xFF\xFF\xFF\xFF" + binary_data[44:]
+                        binary_data[:40] + b"\xff\xff\xff\xff" + binary_data[44:]
                     )
                 else:
                     binary_data = binary_data[44:]
         return binary_data, output_file
+
+    # async def combine_stream(
+    #     self,
+    #     stream: list[bytes],
+    #     desired_output_format: str | None = None,
+    #     only_file=False,
+    # ) -> GradioDataModel | FileData:
+    #     """Combine all of the stream chunks into a single file.
+
+    #     This is needed for downloading the stream and for caching examples.
+    #     If `only_file` is True, only the FileData corresponding to the file should be returned (needed for downloading the stream).
+    #     The desired_output_format optionally converts the combined file. Should only be used for cached examples.
+    #     """
+    #     # TODO: URGENT
+    #     pass
 
     def process_example(
         self, value: Tuple[int, np.ndarray] | str | Path | bytes | None
